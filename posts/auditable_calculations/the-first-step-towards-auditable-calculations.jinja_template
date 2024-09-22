@@ -1,0 +1,8 @@
+---
+layout: post
+title: "The First Step Towards Auditable Calculations"
+tags: [calculations, auditability, complexity, python, clean-architecture]
+---
+
+# The First Step To Auditable Calculations
+In complex domains auditability is an important feature of anything that is done. Engineering team, while knowing gaining knowledge working with experts, will never be . Calculations are part of most software system, however in complex domains it's not good enough for calculations to be correct. Another very important requirement is to be able to prove that the

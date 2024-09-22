@@ -2,11 +2,17 @@
 
 !.gitignore
 !README.md
+!Makefile
 
-!posts
-!posts/.keep
+!posts/
+!posts/*
 
-!tooling
-!tooling/.keep
+!tooling/
+!tooling/*
+
+!**/.keep
+!**/*.py
+!**/*.jinja_template
+!**/requirements.txt
 
 
