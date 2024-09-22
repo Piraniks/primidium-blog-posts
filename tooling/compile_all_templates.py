@@ -79,7 +79,7 @@ if __name__ == '__main__':
             continue
 
         # Load all snippets for given post
-        python_snippet_paths = tuple(child_path for child_path in post_PLdirectory.iterdir() if is_python_snippet(path=child_path))
+        python_snippet_paths = tuple(child_path for child_path in post_directory.iterdir() if is_python_snippet(path=child_path))
         python_snippets = {}
         for python_snippet_path in python_snippet_paths:
             snippet = read_file_data(path=python_snippet_path)
