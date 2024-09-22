@@ -1,0 +1,12 @@
+**/**
+
+!.gitignore
+!README.md
+
+!posts
+!posts/.keep
+
+!tooling
+!tooling/.keep
+
+
