@@ -1,0 +1,2 @@
+# Testing utilities
+pytest==8.3.3

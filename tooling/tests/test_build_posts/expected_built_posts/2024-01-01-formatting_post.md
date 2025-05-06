@@ -1,0 +1,13 @@
+---
+layout: post
+title: "Formatting Post."
+tags: [formatting, prompts]
+description: Post testing formatting.
+date: 2024-01-01
+last_modified_at: 2025-01-01
+---
+
+# Testing prompts.
+
+> This is a `tip`.
+{: .prompt-tip }

@@ -5,14 +5,20 @@
 !Makefile
 
 !posts/
-!posts/*
+!posts/**
 
 !tooling/
-!tooling/*
+!tooling/**
+tooling/**/built_posts/
+tooling/**/built_posts/**
+
+!POST_TEMPLATE/
+!POST_TEMPLATE/**
+
+!compiled_posts/
+!compiled_posts/**
 
 !**/.keep
 !**/*.py
-!**/*.jinja_template
+!**/*.template
 !**/requirements.txt
-
-

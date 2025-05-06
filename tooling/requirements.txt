@@ -1,3 +1,8 @@
+# Building posts.
 Jinja2==3.1.4
+# Debugging everything.
 IPython==8.13.0
+# Testing like human beings.
 pytest==8.3.3
+# CLI tooling for easier management
+typer==0.15.2

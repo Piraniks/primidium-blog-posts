@@ -1,0 +1,8 @@
+---
+layout: post
+title: "{{POST_TITLE}}"
+tags: [{{POST_TAGS}}]
+description: {{POST_DESCRIPTION}}
+date: {{POST_CREATED_AT}}
+last_modified_at: {{POST_LAST_MODIFIED_AT}}
+--- 
