@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Note-taking in LLM environment"
-tags: [note-making, automation]
+tags: [note-taking, LLM, process]
 description: Currently most online meeting solutions provide LLM summaries, transcripts and much more. But there is still value in note-taking during the meeting.
 date: 2025-06-22
 #last_modified_at: 2025-06-25
