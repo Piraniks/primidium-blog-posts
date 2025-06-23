@@ -7,7 +7,7 @@ date: 2025-06-22
 #last_modified_at: 2025-06-25
 ---
 
-# Notes
+## Notes
 A goal of note-taking is to have notes at the end.
 Something that will be a result of the meeting, something to easily come back to.
 
@@ -19,26 +19,26 @@ That is not the main point of note-taking.
 
 I would argue that *the* goal of note-taking is not the text.
 
-# Crystallize your thoughts
+## Crystallize your thoughts
 When you note something down, you're making decisions about what's important enough to record.
 LLMs can summarize content, but this generated summary won't force you to take effort, consider important details, create a high level plan on what would the next steps be.
 
 Taking notes also reveals gaps in your understanding. If you struggle to describe a concept in detail to write it down, that's a signal you need more data.
 
 
-# Different formats of notes
+## Different formats of notes
 LLMs are, at least for now, quite good at making lists, summaries, turning long texts to small texts or the other way around.
 Notes can take other forms depending on the needs.
 If we're talking about high-level problems, designing the flow of data or figuring out how
 
 
-# Context
+## Context
 Meetings or problems do not all exist on the same level of abstraction.
 LLMs are fully capable of taking previous notes into account, but not yet to understand what level of abstraction will be most useful.
 This requires understanding of the problem not in the vacuum but in the context in which it's being solved.
 
 
-# Timeliness
+## Timeliness
 Most automated tools get you the notes and summaries only after the meeting.
 Those are valuable as a reminder of what was discussed or for absentees to catch up.
 During the meeting, by the very nature of generating the summary only after the meeting, cannot help during the meeting.
@@ -47,7 +47,7 @@ By taking notes manually, you may find areas of ignorance which may significantl
 More meaningful questions to reduce the unknowns or find problems and eliminate them before any time is invested.
 
 
-# Automate the boring stuff
+## Automate the boring stuff
 I find it best to take notes:
 - When I don't have a clear idea of the problem
 - On complex problems with multiple solutions
