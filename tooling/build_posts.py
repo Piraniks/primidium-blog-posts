@@ -28,7 +28,7 @@ TIP_SUFFIX = r"""
 logger = logging.getLogger(name=__name__)
 
 
-def is_path_hidden(path: Path) -> bool:
+def is_path_hidden(*, path: Path) -> bool:
     relative_name = path.name
 
     if relative_name.startswith('.') or relative_name.startswith('_'):
@@ -37,20 +37,26 @@ def is_path_hidden(path: Path) -> bool:
     return False
 
 
-def is_post_template(path: Path) -> bool:
+def is_post_template(*, path: Path) -> bool:
     return path.name.endswith(TEMPLATE_SUFFIX)
 
 
-def is_code_snippet(path: Path) -> bool:
+def is_code_snippet(*, path: Path) -> bool:
     return path.name.endswith(PYTHON_SNIPPET_SUFFIX)
 
 
-def determine_file_language(file_name: str) -> str:
+class NoLanguageDetected(Exception):
+    pass
+
+
+def determine_file_language(*, file_name: str) -> str:
     if file_name.endswith(PYTHON_SNIPPET_SUFFIX):
         return 'python'
 
+    raise NoLanguageDetected()
 
-def read_file_data(path: Path) -> str:
+
+def read_file_data(*, path: Path) -> str:
     with open(path, mode='r') as file:
         return file.read()
 
@@ -65,7 +71,7 @@ def snippet_creator(file_name: str, *, snippets: dict[Path, str], template_direc
 
     logger.debug(f'Retrieving snippet {snippet_absolute_path} (as {file_name}) in the context of {template_directory}')
 
-    return SNIPPET_FORMAT.format(code=snippet, language=determine_file_language(file_name))
+    return SNIPPET_FORMAT.format(code=snippet, language=determine_file_language(file_name=file_name))
 
 
 def collect_snippets(*, path: Path, root_path: Path) -> dict[Path, str]:

@@ -1,10 +1,13 @@
+create_venv:
+	python -m venv .venv
+
 install_tooling_dependencies:
 	python -m pip install -r tooling/requirements.txt
 
-# TODO:
-# install_posts_dependencies:
+install_posts_dependencies:
+	find . -type f -name requirements.txt -not -path "./tooling/*" -exec pip install -r {} \;
 
-init: create_venv install_tooling_dependencies
+init: create_venv install_tooling_dependencies install_posts_dependencies
 
 clean:
 	rm -rf .venv
