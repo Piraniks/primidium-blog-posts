@@ -4,4 +4,3 @@ dependency-injector==4.42.0
 lagom==2.6.0
 # Testing utilities
 pytest==8.3.3
-factory-boy==3.3.1

@@ -1,14 +1,19 @@
+from uuid import UUID
+
 import pytest
 
 from posts.dependency_injection.notification_sender import User, Notification
-from posts.dependency_injection.factories import UserFactory, NotificationFactory
 
 
 @pytest.fixture
 def user() -> User:
-    return UserFactory()
+    return User(email='user@email.com')
 
 
 @pytest.fixture
 def notification() -> Notification:
-    return NotificationFactory()
+    return Notification(
+        id=UUID(int=0),
+        name='Notification Name',
+        message='Message',
+    )
