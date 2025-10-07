@@ -15,12 +15,12 @@ cli_application = typer.Typer()
 
 
 @cli_application.command(name='ping')
-def _():
+def ping():
     typer.echo('pong')
 
 
 @cli_application.command(name='build-posts')
-def _(*, to: str):
+def build_posts(*, to: str):
     built_posts_directory = Path(to).absolute()
 
     return build_posts(posts_directory=POSTS_DIRECTORY, built_posts_directory=built_posts_directory)

@@ -74,7 +74,7 @@ def test_inject_randomized_seed_notification_channel_using_a_factory(
             self.seed = uuid4()
 
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
-            return Confirmation(notification_id=id, channel_id=f'in_memory__{self.seed}')
+            return Confirmation(notification_id=id, channel_id=f'in_memory+{self.seed}')
 
     container.register(NotificationChannel, NotificationHandlerWithRandomizedSeed)
 
@@ -138,9 +138,9 @@ def test_inject_notification_channel_with_parameters_on_resolution(
     # between the instances - request id, user context, personalized configuration, feature flags and more.
     # The only way to simulate this behavior is to pass the parameters as kwargs to the depending code directly, using
     # some context variables and skipping the resolver. At that point it's stateful, so we're back to the reason we
-    # introduce a dependency injection tooling in the first place. Another alternative would be to instead of passing
-    # the parameters as kwargs to resolver, instead of returning an instance, return a callable that will create the
-    # instance with the parameters passed in the call, very similar to how functional paradigm resolves similar issues.
+    # introduced a dependency injection tooling in the first place. Another alternative would be to instead of passing
+    # the parameters as kwargs to resolver. Instead of returning an instance, return a callable that will create the
+    # instance with the parameters passed in the call. Very similar to how functional paradigm resolves similar issues.
     sender = 'parametrized_on_resolution'
     container.register(NotificationChannel, ParametrizedNotificationChannel)
 
