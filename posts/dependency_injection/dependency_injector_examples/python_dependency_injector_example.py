@@ -62,11 +62,15 @@ class EmailNotificationChannel(NotificationChannel):
         self.auth_key = auth_key
 
 
+class TypedConfiguration(Protocol):
+    email_auth_key: str
+
+
 class Container(containers.DeclarativeContainer):
-    configuration = providers.Configuration()
-    notification_channel = providers.Factory(
+    configuration: TypedConfiguration = providers.Configuration(strict=True)
+    notification_channel: providers.Provider[NotificationChannel] = providers.Factory(
         instance_of=EmailNotificationChannel,
-        auth_key=configuration.email_auth_key,  # No autosuggestion since configuration is dynamic.
+        auth_key=configuration.email_auth_key,
     )
 
 
