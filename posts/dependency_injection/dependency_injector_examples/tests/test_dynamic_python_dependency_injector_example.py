@@ -24,31 +24,3 @@ def test_inject_client_without_any_parameters(
     confirmation = dynamic_send_notification(user=user, notification=notification)
 
     assert confirmation == Confirmation(notification_id=notification.id, channel_id='dynamic+in_memory')
-
-
-def test_inject_randomized_seed_notification_channel_using_an_instance(
-    user: User,
-    notification: Notification,
-):
-    ...
-
-
-def test_inject_randomized_seed_notification_channel_using_a_factory(
-    user: User,
-    notification: Notification,
-):
-    ...
-
-
-def test_inject_notification_channel_with_parameters_on_injection(
-    user: User,
-    notification: Notification,
-):
-    ...
-
-
-def test_inject_notification_channel_with_parameters_on_resolution(
-    user: User,
-    notification: Notification,
-):
-    ...
