@@ -31,7 +31,7 @@ from typing import Protocol
 from uuid import UUID
 
 from dependency_injector import containers, providers
-from dependency_injector.wiring import inject, Provide
+from dependency_injector.wiring import inject, Provide, Provider
 
 
 @dataclass(frozen=True)
@@ -81,6 +81,26 @@ def declarative_send_notification(
     notification: Notification,
     notification_channel: NotificationChannel = Provide[Container.notification_channel],
 ) -> Confirmation:
+    confirmation = notification_channel.send(
+        id=notification.id,
+        to=user.email,
+        subject=notification.name,
+        body=notification.message
+    )
+    return confirmation
+
+
+@inject
+def declarative_send_notification_with_provider_parameters(
+    *,
+    user: User,
+    notification: Notification,
+    notification_channel_provider: providers.Factory[NotificationChannel] = Provider[Container.notification_channel],
+    # The only use-case in tests that requires kwargs is parametrization on resolution, in practice it would probably
+    # be based on some values from inside the function, but this is the simplest example to show off and test.
+    **notification_channel_kwargs
+) -> Confirmation:
+    notification_channel = notification_channel_provider(**notification_channel_kwargs)
     confirmation = notification_channel.send(
         id=notification.id,
         to=user.email,

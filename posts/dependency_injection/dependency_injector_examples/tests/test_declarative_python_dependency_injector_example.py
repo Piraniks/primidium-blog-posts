@@ -1,7 +1,3 @@
-# Because we're wiring the code automatically to actually inject into our code, we cannot pass data on injection.
-# We could still do it if we:
-# - abandoned wiring and decided to deal with containers.
-# - returned a callable instead of an instance, which would accept the parameters on injection and return an instance.
 from uuid import UUID, uuid4
 
 from dependency_injector import containers, providers
