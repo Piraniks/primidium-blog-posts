@@ -1,12 +1,12 @@
 """
 Dependency Injector is the most popular DI library with features including automatic wiring, overwriting of
 dependencies, supporting asynchronous dependencies. The container can be declarative or dynamic (imperative)
-and is capable of resources management.
+and is capable of resource management.
 
 Pros:
-- Solid documentation with multiple examples on how-to use most common functionalities.
-- Container is aware of and changing behaviour based on whether dependencies are synchronous or asynchronous.
-- Supports for generator-based dependencies, like resources with clean-up steps.
+- Solid documentation with multiple examples on how to use the most common functionalities.
+- Container is aware of and changing behavior based on whether dependencies are synchronous or asynchronous.
+- Supports for generator-based dependencies, like resources with cleanup steps.
 - Has built-in support for factories, type hints, and automatic wiring.
 - Gives great control over what dependencies types are injected - through type hints and providers which can assert on
 provided instance types.
@@ -22,7 +22,7 @@ learn from the documentation.
 Dependency Injector is a great choice and can be considered a solid and capable solution for all types of projects
 but the most trivial ones or most basic educational purposes for a newcomer to dependency injection pattern - but only
 due to the overhead to learn the tool + it's wide capabilities to understand what's going on. I would probably still
-recommend it for newbies, but only wit the assumption that it will be used long-term - e.g. a project to be maintained
+recommend it for newbies, but only wit the assumption that it will be used long-term - e.g., a project to be maintained
 in the future, not one-time scripts to be deleted after a few days.
 It seems like a default choice for a Python project requiring a dependency injection library.
 """
@@ -115,6 +115,8 @@ def dynamic_send_notification(
     *,
     user: User,
     notification: Notification,
+    # In theory, we could use the same string approach when using a declarative container. But we cannot use it the
+    # other way around, because dynamic container has no attributes to start with, so this is the only sensible option.
     notification_channel: NotificationChannel = Provide['notification_channel'],
 ) -> Confirmation:
     confirmation = notification_channel.send(
