@@ -1,5 +1,6 @@
 from uuid import UUID, uuid4
 
+import pytest
 from dependency_injector import containers, providers
 
 from posts.dependency_injection.dependency_injector_examples.python_dependency_injector_example import (
@@ -207,5 +208,69 @@ def test_inject_notification_channel_with_parameters_passed_to_container(
     assert confirmation.channel_id == f'parametrized+{sender}'
 
 
-def test_inject_notification_channel_with_dependency():
-    ...
+@pytest.fixture
+def different_user() -> User:
+    return User(email='different.user@email.com')
+
+
+@pytest.fixture
+def different_notification() -> Notification:
+    return Notification(
+        id=UUID(int=1),
+        name='Different Notification Name',
+        message='DifferentMessage',
+    )
+
+
+def test_inject_notification_channel_with_dependency(
+    user: User,
+    notification: Notification,
+    different_user: User,
+    different_notification: Notification,
+):
+    # We could simplify this test greatly by using fixtures, so most of this setup noise is delegated to fixtures, and
+    # we're provided with actual objects/services to work with. Pytest fixture system is a dependency injection library
+    # of its own, we can get it working with dependency injector quite easily.
+
+    class DatabaseEmailRecorderService:
+        def __init__(self):
+            self.sent_emails: dict[UUID, tuple[str, str, str]] = dict()
+
+        def send(self, id: UUID, to: str, subject: str, body: str) -> None:
+            # Imagine API calls here in a production-ready implementation.
+            # In the case of test implementation - collecting the data for ensuring emails were sent is most likely more
+            # than enough. Notification example is maybe not the best example of a real-world use-case, but think about
+            # this being a database shared across many stateless services - handling connection pools etc.
+            self.sent_emails[id] = (to, subject, body)
+
+    class ExternalServiceNotificationChannel(NotificationChannel):
+        def __init__(self, email_service: DatabaseEmailRecorderService):
+            self.email_service = email_service
+
+        def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
+            self.email_service.send(id=id, to=to, subject=subject, body=body)
+            return Confirmation(notification_id=id, channel_id=f'parametrized')
+
+    # Overriding can happen on a particular provider level as well as overriding the whole container - by providing an
+    # alternative container object to override with.
+    class DependencyContainer(containers.DeclarativeContainer):
+        email_recorder_service = providers.Singleton(DatabaseEmailRecorderService)
+        notification_channel = providers.Factory(ExternalServiceNotificationChannel, email_service=email_recorder_service)
+
+    container = Container()
+    overriding_container = DependencyContainer()
+    container.override(overriding_container)
+    container.wire(modules=['..python_dependency_injector_example'])
+
+    confirmation = declarative_send_notification(user=user, notification=notification)
+    different_confirmation = declarative_send_notification(user=different_user, notification=different_notification)
+    assert confirmation != different_confirmation
+
+    # The recorder dependency is a singleton, so we can easily get the same object with the recorded emails.
+    email_recorder_service = overriding_container.email_recorder_service()
+    assert len(email_recorder_service.sent_emails) == 2
+
+    expected_sent_email_for_confirmation = (user.email, notification.name, notification.message)
+    assert email_recorder_service.sent_emails[confirmation.notification_id] == expected_sent_email_for_confirmation
+    expected_sent_email_for_different_confirmation = (different_user.email, different_notification.name, different_notification.message)
+    assert email_recorder_service.sent_emails[different_confirmation.notification_id] == expected_sent_email_for_different_confirmation

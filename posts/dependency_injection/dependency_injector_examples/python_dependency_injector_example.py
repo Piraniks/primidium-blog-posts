@@ -68,6 +68,9 @@ class TypedConfiguration(Protocol):
 
 class Container(containers.DeclarativeContainer):
     configuration: TypedConfiguration = providers.Configuration(strict=True)
+    # The main reason we're using a concrete implementation in the factory here is to show off how to work with such
+    # cases. Of course in theory we could have a ContainerBase from which all containers inherit etc... but even with
+    # this more complex setup, it's still very easy to follow and work with in testing.
     notification_channel: providers.Provider[NotificationChannel] = providers.Factory(
         instance_of=EmailNotificationChannel,
         auth_key=configuration.email_auth_key,
@@ -95,6 +98,8 @@ def declarative_send_notification_with_provider_parameters(
     *,
     user: User,
     notification: Notification,
+    # Important: Provider here vs Provide in other cases. It will return the provider (e.g., a factory) instead of an
+    # instance, so we can pass arguments dynamically, based on the local context.
     notification_channel_provider: providers.Factory[NotificationChannel] = Provider[Container.notification_channel],
     # The only use-case in tests that requires kwargs is parametrization on resolution, in practice it would probably
     # be based on some values from inside the function, but this is the simplest example to show off and test.
