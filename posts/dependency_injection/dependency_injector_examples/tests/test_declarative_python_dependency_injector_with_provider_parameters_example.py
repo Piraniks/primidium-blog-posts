@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from dependency_injector import containers, providers
+from dependency_injector import providers
 
 from posts.dependency_injection.dependency_injector_examples.python_dependency_injector_example import (
     Container,
@@ -23,13 +23,10 @@ def test_inject_client_with_parameters_on_resolution(
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
             return Confirmation(notification_id=id, channel_id=f'declarative+{self.sender}')
 
-    class SimpleContainer(containers.DeclarativeContainer):
-        notification_channel = providers.Factory(SimpleNotificationChannel)
-
     container = Container()
     # Even though we're using a declarative approach and using attributes of this container, we can override a particular
     # container making it easier to test. The new factories do not have to be 1-1 with the ones they override.
-    container.override(overriding=SimpleContainer())
+    container.notification_channel.override(providers.Factory(SimpleNotificationChannel))
     container.wire(modules=['..python_dependency_injector_example'])
 
     sender = 'parametrized_on_resolution'

@@ -9,6 +9,37 @@ from posts.dependency_injection.dependency_injector_examples.python_dependency_i
 from posts.dependency_injection.notification_sender import NotificationChannel, Confirmation, User, Notification
 
 
+# In the rest of the tests, both overrides are used, depending on the need, but both are equivalent.
+# In some cases it might be easier to override only the one thing we want to test with on the container directly.
+# In other cases, it might be more convenient to provide a whole container that encapsulates e.g., Object provider state,
+# so we don't have to worry about it.
+def test_provider_vs_container_overriding(
+    user: User,
+    notification: Notification,
+):
+    class OverridingNotificationChannel(NotificationChannel):
+        def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
+            return Confirmation(notification_id=id, channel_id='dummy')
+
+    class OverridingContainer(containers.DeclarativeContainer):
+        notification_channel = providers.Factory(OverridingNotificationChannel)
+
+    # The 2 overrides below are equivalent. Because we're overriding the whole provider, and it's the provider that
+    # defines parameters into the notification channel, we are free to use any interface we please. We're not tied to
+    # the Container implementations.
+    container_for_container_override = Container()
+    container_for_container_override.override(OverridingContainer)
+    container_for_container_override.wire(modules=['..python_dependency_injector_example'])
+    confirmation_with_container_override = declarative_send_notification(user=user, notification=notification)
+
+    container_for_provider_override = Container()
+    container_for_provider_override.notification_channel.override(providers.Factory(OverridingNotificationChannel))
+    container_for_provider_override.wire(modules=['..python_dependency_injector_example'])
+    confirmation_with_provider_override = declarative_send_notification(user=user, notification=notification)
+
+    assert confirmation_with_container_override == confirmation_with_provider_override
+
+
 def test_inject_client_without_any_parameters(
     user: User,
     notification: Notification,
@@ -18,20 +49,17 @@ def test_inject_client_without_any_parameters(
     # But it also enables per use-case container override while still having automatic wiring in place with code typing.
     class SimpleNotificationChannel(NotificationChannel):
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
-            return Confirmation(notification_id=id, channel_id='declarative+in_memory')
-
-    class SimpleContainer(containers.DeclarativeContainer):
-        notification_channel = providers.Factory(SimpleNotificationChannel)
+            return Confirmation(notification_id=id, channel_id='declarative')
 
     container = Container()
-    # Even though we're using a declarative approach and using attributes of this container, we can override a particular
-    # container making it easier to test. The new factories do not have to be 1-1 with the ones they override.
-    container.override(overriding=SimpleContainer())
+    # Even though we're using a declarative approach and using attributes of this container, we can override a
+    # particular container making it easier to test. The new factories do not have to be 1-1 with the ones they override.
+    container.notification_channel.override(providers.Factory(SimpleNotificationChannel))
     container.wire(modules=['..python_dependency_injector_example'])
 
     confirmation = declarative_send_notification(user=user, notification=notification)
 
-    assert confirmation == Confirmation(notification_id=notification.id, channel_id='declarative+in_memory')
+    assert confirmation == Confirmation(notification_id=notification.id, channel_id='declarative')
 
 
 def test_inject_randomized_seed_notification_channel_using_an_instance(
@@ -43,23 +71,23 @@ def test_inject_randomized_seed_notification_channel_using_an_instance(
             self.seed = uuid4()
 
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
-            return Confirmation(notification_id=id, channel_id=f'declarative+in_memory+{self.seed}')
+            return Confirmation(notification_id=id, channel_id=f'declarative+{self.seed}')
 
     class ObjectContainer(containers.DeclarativeContainer):
         # We could use provider.Singleton here as well, but for the sake of an even more straight forward example,
         # an object is used - it means that the exact same object will be used for all calls, not once per container
-        # like in case of a singleton. It's returned as-is, so we can have a truly global single instance, eagerly
+        # like in a case of a singleton. It's returned as-is, so we can have a truly global single instance, eagerly
         # evaluated.
         notification_channel = providers.Object(NotificationChannelWithRandomSeed())
 
     first_container = Container()
-    first_container.override(overriding=ObjectContainer())
+    first_container.override(ObjectContainer())
     first_container.wire(modules=['..python_dependency_injector_example'])
 
     first_confirmation = declarative_send_notification(user=user, notification=notification)
 
     second_container = Container()
-    second_container.override(overriding=ObjectContainer())
+    second_container.override(ObjectContainer())
     second_container.wire(modules=['..python_dependency_injector_example'])
     second_confirmation = declarative_send_notification(user=user, notification=notification)
 
@@ -75,15 +103,12 @@ def test_inject_randomized_seed_notification_channel_using_a_singleton_factory(
             self.seed = uuid4()
 
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
-            return Confirmation(notification_id=id, channel_id=f'declarative+in_memory+{self.seed}')
-
-    class SeededContainer(containers.DeclarativeContainer):
-        # For every container instance, the same object is returned. If we want to use the same service, state etc.
-        # throughout the whole process/call, we need to use a singleton provider instead of a factory.
-        notification_channel = providers.Singleton(NotificationChannelWithRandomSeed)
+            return Confirmation(notification_id=id, channel_id=f'declarative+{self.seed}')
 
     first_container = Container()
-    first_container.override(overriding=SeededContainer())
+    # For every container instance, the Singleton provider will return the same object. If we want to use the same
+    # service, state etc. throughout the whole process/call, we need to use a singleton provider instead of a factory.
+    first_container.notification_channel.override(providers.Singleton(NotificationChannelWithRandomSeed))
     first_container.wire(modules=['..python_dependency_injector_example'])
 
     first_confirmation = declarative_send_notification(user=user, notification=notification)
@@ -91,7 +116,7 @@ def test_inject_randomized_seed_notification_channel_using_a_singleton_factory(
     assert first_confirmation == second_confirmation
 
     second_container = Container()
-    second_container.override(overriding=SeededContainer())
+    second_container.notification_channel.override(providers.Singleton(NotificationChannelWithRandomSeed))
     second_container.wire(modules=['..python_dependency_injector_example'])
 
     third_confirmation = declarative_send_notification(user=user, notification=notification)
@@ -107,15 +132,12 @@ def test_inject_randomized_seed_notification_channel_using_a_factory(
             self.seed = uuid4()
 
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
-            return Confirmation(notification_id=id, channel_id=f'declarative+in_memory+{self.seed}')
-
-    class SeededContainer(containers.DeclarativeContainer):
-        # Important to note: factory will return different objects one each call, compared to a singleton where for
-        # any container the same object is returned.
-        notification_channel = providers.Factory(NotificationChannelWithRandomSeed)
+            return Confirmation(notification_id=id, channel_id=f'declarative+{self.seed}')
 
     container = Container()
-    container.override(overriding=SeededContainer())
+    # Important to note: the Factory provider will return different objects one each call, compared to a singleton
+    # where for any container the same object is returned.
+    container.notification_channel.override(providers.Factory(NotificationChannelWithRandomSeed))
     container.wire(modules=['..python_dependency_injector_example'])
 
     first_confirmation = declarative_send_notification(user=user, notification=notification)
@@ -135,7 +157,7 @@ def test_inject_notification_channel_with_parameters_on_injection(
             self.sender = sender
 
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
-            return Confirmation(notification_id=id, channel_id=f'declarative+in_memory+{self.sender}')
+            return Confirmation(notification_id=id, channel_id=f'declarative+{self.sender}')
 
     sender = 'parametrized_on_injection'
     class SeededContainer(containers.DeclarativeContainer):
@@ -145,12 +167,12 @@ def test_inject_notification_channel_with_parameters_on_injection(
         notification_channel = providers.Factory(ParametrizedNotificationChannel, sender=sender)
 
     container = Container()
-    container.override(overriding=SeededContainer())
+    container.override(SeededContainer())
     container.wire(modules=['..python_dependency_injector_example'])
 
     confirmation = declarative_send_notification(user=user, notification=notification)
 
-    assert confirmation.channel_id == f'declarative+in_memory+{sender}'
+    assert confirmation.channel_id == f'declarative+{sender}'
 
 
 def test_inject_notification_channel_with_parameters_passed_to_container(
@@ -162,8 +184,10 @@ def test_inject_notification_channel_with_parameters_passed_to_container(
             self.sender = sender
 
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
-            return Confirmation(notification_id=id, channel_id=f'declarative+in_memory+{self.sender}')
+            return Confirmation(notification_id=id, channel_id=f'parametrized+{self.sender}')
 
+    # Overriding can happen on a particular provider level as well as overriding the whole container - by providing an
+    # alternative container object to override with.
     class SeededContainer(containers.DeclarativeContainer):
         # Config allows passing parameters on factory creation in a structured way with support for many sources.
         config = providers.Configuration()
@@ -175,19 +199,13 @@ def test_inject_notification_channel_with_parameters_passed_to_container(
     container = Container()
     sender = 'parametrized_on_container_instance'
     overriding_container = SeededContainer(config=dict(sender=sender))
-    container.override(overriding=overriding_container)
+    container.override(overriding_container)
     container.wire(modules=['..python_dependency_injector_example'])
 
     confirmation = declarative_send_notification(user=user, notification=notification)
 
-    assert confirmation.channel_id == f'declarative+in_memory+{sender}'
+    assert confirmation.channel_id == f'parametrized+{sender}'
 
 
 def test_inject_notification_channel_with_dependency():
     ...
-
-
-def test_provider_vs_container_overriding():
-    ...
-
-...

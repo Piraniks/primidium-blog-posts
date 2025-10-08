@@ -15,7 +15,7 @@ def test_inject_client_without_any_parameters(
 ):
     class InMemoryNotificationChannel(NotificationChannel):
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
-            return Confirmation(notification_id=id, channel_id='dynamic+in_memory')
+            return Confirmation(notification_id=id, channel_id='dynamic')
 
     container = DynamicContainer()
     container.notification_channel = providers.Factory(InMemoryNotificationChannel)
@@ -23,4 +23,4 @@ def test_inject_client_without_any_parameters(
 
     confirmation = dynamic_send_notification(user=user, notification=notification)
 
-    assert confirmation == Confirmation(notification_id=notification.id, channel_id='dynamic+in_memory')
+    assert confirmation == Confirmation(notification_id=notification.id, channel_id='dynamic')
