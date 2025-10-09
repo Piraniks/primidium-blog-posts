@@ -26,30 +26,13 @@ recommend it for newbies, but only wit the assumption that it will be used long-
 in the future, not one-time scripts to be deleted after a few days.
 It seems like a default choice for a Python project requiring a dependency injection library.
 """
-from dataclasses import dataclass
-from typing import Protocol
+from typing import Protocol, cast
 from uuid import UUID
 
 from dependency_injector import containers, providers
 from dependency_injector.wiring import inject, Provide, Provider
 
-
-@dataclass(frozen=True)
-class User:
-    email: str
-
-
-@dataclass(frozen=True)
-class Notification:
-    id: UUID
-    name: str
-    message: str
-
-
-@dataclass(frozen=True)
-class Confirmation:
-    notification_id: UUID
-    channel_id: str
+from posts.dependency_injection.notification_sender import Confirmation, User, Notification
 
 
 class NotificationChannel(Protocol):
@@ -67,7 +50,7 @@ class TypedConfiguration(Protocol):
 
 
 class Container(containers.DeclarativeContainer):
-    configuration: TypedConfiguration = providers.Configuration(strict=True)
+    configuration = cast(TypedConfiguration, cast(object, providers.Configuration(strict=True)))
     # The main reason we're using a concrete implementation in the factory here is to show off how to work with such
     # cases. Of course in theory we could have a ContainerBase from which all containers inherit etc... but even with
     # this more complex setup, it's still very easy to follow and work with in testing.

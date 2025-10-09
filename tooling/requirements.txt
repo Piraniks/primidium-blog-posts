@@ -6,3 +6,5 @@ IPython==8.13.0
 pytest==8.3.3
 # CLI tooling for easier management
 typer==0.15.2
+# Type checking
+ty==0.0.1a21
