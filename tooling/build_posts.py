@@ -63,7 +63,7 @@ def read_file_data(*, path: Path) -> str:
 
 
 # Cannot force kwargs for file_name as templates would need to call it using kwargs as well, which is not ergonomic.
-def snippet_creator(file_name: str, *, snippets: dict[Path, str], template_directory: Path) -> str:
+def snippet_factory(file_name: str, *, snippets: dict[Path, str], template_directory: Path) -> str:
     snippet_absolute_path = (template_directory / file_name).resolve()
     snippet: str | None = snippets.get(snippet_absolute_path)
 
@@ -148,7 +148,8 @@ def generate_built_post_name(
     return built_post_path
 
 
-def tip(tip: str) -> str:
+# Cannot force kwargs for file_name as templates would need to call it using kwargs as well, which is not ergonomic.
+def tip_factory(tip: str) -> str:
     return TIP_FORMAT.format(tip=tip) + TIP_SUFFIX
 
 
@@ -156,8 +157,8 @@ def build_post_contents(
     *, environment: Environment, snippets: dict[Path, str], template_content: str, template_directory: Path
 ) -> str:
     template = environment.from_string(source=template_content)
-    fetch_snippet_for_template = partial(snippet_creator, snippets=snippets, template_directory=template_directory)
-    built_post_data = template.render(snippet=fetch_snippet_for_template, tip=tip)
+    fetch_snippet_for_template = partial(snippet_factory, snippets=snippets, template_directory=template_directory)
+    built_post_data = template.render(snippet=fetch_snippet_for_template, tip=tip_factory)
 
     # Ensure that the post ends with a newline to follow best practices.
     # Not sure why this isn't happening, maybe jinja2 eats newlines at the end?

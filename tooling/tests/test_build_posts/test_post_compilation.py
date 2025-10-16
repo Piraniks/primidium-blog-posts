@@ -38,7 +38,7 @@ def compare_directories(*, expected_directory: Path, built_directory: Path) -> N
                 expected_file_contents = expected_file.read()
                 built_file_contents = built_file.read()
 
-                assert expected_file_contents == built_file_contents
+            assert expected_file_contents == built_file_contents
 
 
 def delete_built_directory_contents(*, directory_path: Path) -> None:
@@ -47,13 +47,13 @@ def delete_built_directory_contents(*, directory_path: Path) -> None:
 
 
 def _delete_built_directory(*, directory_path: Path) -> None:
-    if directory_path.is_dir():
-        for built_directory_path_child in directory_path.iterdir():
-            _delete_built_directory(directory_path=built_directory_path_child)
-        directory_path.rmdir()
-
-    else:
+    if not directory_path.is_dir():
         directory_path.unlink()
+        return
+
+    for built_directory_path_child in directory_path.iterdir():
+        _delete_built_directory(directory_path=built_directory_path_child)
+    directory_path.rmdir()
 
 
 @pytest.fixture
