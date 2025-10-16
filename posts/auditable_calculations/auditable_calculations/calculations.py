@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from decimal import Decimal
 from functools import reduce
+from operator import add, mul, sub, truediv
 from typing import Protocol
-from operator import add, mul, truediv, sub
 
 
 @dataclass(frozen=True)

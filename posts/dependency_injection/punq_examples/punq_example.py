@@ -26,7 +26,7 @@ security risk.
 """
 from punq import Container
 
-from posts.dependency_injection.notification_sender import NotificationChannel, User, Confirmation, Notification
+from posts.dependency_injection.notification_sender import Confirmation, Notification, NotificationChannel, User
 
 
 def send_notification(

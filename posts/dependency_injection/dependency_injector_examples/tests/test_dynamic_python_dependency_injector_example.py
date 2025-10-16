@@ -6,7 +6,7 @@ from dependency_injector.containers import DynamicContainer
 from posts.dependency_injection.dependency_injector_examples.python_dependency_injector_example import (
     dynamic_send_notification,
 )
-from posts.dependency_injection.notification_sender import NotificationChannel, Confirmation, User, Notification
+from posts.dependency_injection.notification_sender import Confirmation, Notification, NotificationChannel, User
 
 
 def test_inject_client_without_any_parameters(

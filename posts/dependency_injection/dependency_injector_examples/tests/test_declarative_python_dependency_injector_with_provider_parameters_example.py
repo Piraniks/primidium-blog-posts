@@ -6,7 +6,7 @@ from posts.dependency_injection.dependency_injector_examples.python_dependency_i
     Container,
     declarative_send_notification_with_provider_parameters,
 )
-from posts.dependency_injection.notification_sender import NotificationChannel, Confirmation, User, Notification
+from posts.dependency_injection.notification_sender import Confirmation, Notification, NotificationChannel, User
 
 
 def test_inject_client_with_parameters_on_resolution(

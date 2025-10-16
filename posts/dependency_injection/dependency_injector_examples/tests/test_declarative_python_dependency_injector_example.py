@@ -7,7 +7,7 @@ from posts.dependency_injection.dependency_injector_examples.python_dependency_i
     Container,
     declarative_send_notification,
 )
-from posts.dependency_injection.notification_sender import NotificationChannel, Confirmation, User, Notification
+from posts.dependency_injection.notification_sender import Confirmation, Notification, NotificationChannel, User
 
 
 # In the rest of the tests, both overrides are used, depending on the need, but both are equivalent.
@@ -249,7 +249,7 @@ def test_inject_notification_channel_with_dependency(
 
         def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
             self.email_service.send(id=id, to=to, subject=subject, body=body)
-            return Confirmation(notification_id=id, channel_id=f'parametrized')
+            return Confirmation(notification_id=id, channel_id='parametrized')
 
     # Overriding can happen on a particular provider level as well as overriding the whole container - by providing an
     # alternative container object to override with.

@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 import pytest
 from punq import Container
 
-from posts.dependency_injection.notification_sender import NotificationChannel, User, Confirmation, Notification
+from posts.dependency_injection.notification_sender import Confirmation, Notification, NotificationChannel, User
 from posts.dependency_injection.punq_examples.punq_example import send_notification
 
 

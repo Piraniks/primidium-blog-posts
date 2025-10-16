@@ -2,6 +2,7 @@ import logging
 from functools import partial
 from pathlib import Path
 from re import compile
+
 from jinja2 import Environment
 
 PUBLISHED_DATE_REGEX_PATTERN_GROUP_NAME = r'posted_date'

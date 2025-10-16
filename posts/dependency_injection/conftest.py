@@ -2,7 +2,7 @@ from uuid import UUID
 
 import pytest
 
-from posts.dependency_injection.notification_sender import User, Notification
+from posts.dependency_injection.notification_sender import Notification, User
 
 
 @pytest.fixture

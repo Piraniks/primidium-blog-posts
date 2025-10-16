@@ -19,10 +19,14 @@ build_requirements:
 	python tooling/build_requirements.py
 
 test_posts:
-	pytest posts
+	pytest posts -vv
 
 test_tooling:
 	pytest tooling -vv
 
 fix:
-	ruff check --fix
+	git diff --name-only | grep "*.py" | xargs ruff check --fix .
+	git diff --name-only | grep "*.py" | xargs ruff format .
+
+type:
+	ty check .

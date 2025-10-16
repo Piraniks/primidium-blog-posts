@@ -5,7 +5,6 @@ import typer
 
 from tooling.build_posts import build_posts
 
-
 tooling_directory = Path(__file__).parent
 MAIN_REPOSITORY_DIRECTORY = tooling_directory.parent
 POSTS_DIRECTORY = MAIN_REPOSITORY_DIRECTORY / 'posts'
@@ -20,7 +19,7 @@ def ping():
 
 
 @cli_application.command(name='build-posts')
-def build_posts(*, to: str):
+def _build_posts(*, to: str):
     built_posts_directory = Path(to).absolute()
 
     return build_posts(posts_directory=POSTS_DIRECTORY, built_posts_directory=built_posts_directory)

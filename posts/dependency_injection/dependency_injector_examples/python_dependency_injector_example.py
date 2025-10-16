@@ -30,9 +30,9 @@ from typing import Protocol, cast
 from uuid import UUID
 
 from dependency_injector import containers, providers
-from dependency_injector.wiring import inject, Provide, Provider
+from dependency_injector.wiring import Provide, Provider, inject
 
-from posts.dependency_injection.notification_sender import Confirmation, User, Notification
+from posts.dependency_injection.notification_sender import Confirmation, Notification, User
 
 
 class NotificationChannel(Protocol):
