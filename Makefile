@@ -25,8 +25,12 @@ test_tooling:
 	pytest tooling -vv
 
 fix:
-	git diff --name-only | grep "*.py" | xargs ruff check --fix .
-	git diff --name-only | grep "*.py" | xargs ruff format .
+	git diff --name-only | grep "*.py" | xargs ruff check --fix
+	git diff --name-only | grep "*.py" | xargs ruff format
+
+fix_all:
+	ruff check --fix .
+	xargs ruff format .
 
 type:
 	ty check .
