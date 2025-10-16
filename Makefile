@@ -30,7 +30,15 @@ fix:
 
 fix_all:
 	ruff check --fix .
-	xargs ruff format .
+	ruff format .
+
+check:
+	git diff --name-only | grep "*.py" | xargs ruff check
+	git diff --name-only | grep "*.py" | xargs ruff --check format
+
+check_all:
+	ruff check .
+	ruff format --check .
 
 type:
 	ty check .

@@ -26,16 +26,16 @@ TIP_SUFFIX = r"""
 """
 
 
+HIDDEN_PATH_PREFIXES = ('.', '_')
+
+
 logger = logging.getLogger(name=__name__)
 
 
 def is_path_hidden(*, path: Path) -> bool:
     relative_name = path.name
 
-    if relative_name.startswith('.') or relative_name.startswith('_'):
-        return True
-
-    return False
+    return any(relative_name.startswith(hidden_path_prefix) for hidden_path_prefix in HIDDEN_PATH_PREFIXES)
 
 
 def is_post_template(*, path: Path) -> bool:

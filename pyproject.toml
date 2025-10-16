@@ -16,9 +16,11 @@ select = [
     "C90",
     "B",
     "S",
+    "SIM",
 ]
 ignore = [
-    "S701"  # Because we don't render anything - it's only for pre-processing.
+    "S701",  # Because we don't render anything - it's only for pre-processing.
+    "SIM103",  # Sparse is better than dense, so in some scenarios it makes sense, but in others it's a PITA.
 ]
 
 [tool.ruff.lint.mccabe]
