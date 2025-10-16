@@ -22,7 +22,7 @@ def compare_directories(*, expected_directory: Path, built_directory: Path) -> N
     # as well as there are no extra files in the built directory.
     assert expected_file_path_names == built_file_path_names
 
-    for expected_file_path, built_file_path in zip(expected_file_paths, built_file_paths):
+    for expected_file_path, built_file_path in zip(expected_file_paths, built_file_paths, strict=True):
         if expected_file_path.is_dir():
             # Check all nested directories, the same way we check the current one.
             compare_directories(

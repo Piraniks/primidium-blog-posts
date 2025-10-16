@@ -11,8 +11,13 @@ select = [
     "E7",
     "E9",
     "F",
-    "I"
+    "I",
+    "C90",
+    "B"
 ]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 8
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["E402", "F401"]
