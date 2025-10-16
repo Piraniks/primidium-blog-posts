@@ -8,3 +8,4 @@ pytest==8.3.3
 typer==0.15.2
 # Type checking
 ty==0.0.1a21
+ruff==0.14.1

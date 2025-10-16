@@ -23,3 +23,6 @@ test_posts:
 
 test_tooling:
 	pytest tooling -vv
+
+fix:
+	ruff check --fix
