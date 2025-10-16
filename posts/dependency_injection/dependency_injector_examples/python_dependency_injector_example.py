@@ -52,10 +52,10 @@ class TypedConfiguration(Protocol):
 class Container(containers.DeclarativeContainer):
     configuration = cast(TypedConfiguration, cast(object, providers.Configuration(strict=True)))
     # The main reason we're using a concrete implementation in the factory here is to show off how to work with such
-    # cases. Of course in theory we could have a ContainerBase from which all containers inherit etc... but even with
+    # cases. Of course, in theory we could have a ContainerBase from which all containers inherit etc... but even with
     # this more complex setup, it's still very easy to follow and work with in testing.
     notification_channel: providers.Provider[NotificationChannel] = providers.Factory(
-        instance_of=EmailNotificationChannel,
+        EmailNotificationChannel,
         auth_key=configuration.email_auth_key,
     )
 

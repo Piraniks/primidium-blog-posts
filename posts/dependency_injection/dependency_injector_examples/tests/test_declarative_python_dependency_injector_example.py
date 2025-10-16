@@ -191,15 +191,15 @@ def test_inject_notification_channel_with_parameters_passed_to_container(
     # alternative container object to override with.
     class SeededContainer(containers.DeclarativeContainer):
         # Config allows passing parameters on factory creation in a structured way with support for many sources.
-        config = providers.Configuration()
+        configuration = providers.Configuration()
         # Automatically injects the "sender" parameter from the config. It doesn't matter if the container being
         # overridden has the same parameter name or not - which is convenient for testing or different factory
         # arguments.
-        notification_channel = providers.Factory(ParametrizedNotificationChannel, sender=config.sender)
+        notification_channel = providers.Factory(ParametrizedNotificationChannel, sender=configuration.sender)
 
     container = Container()
     sender = 'parametrized_on_container_instance'
-    overriding_container = SeededContainer(config=dict(sender=sender))
+    overriding_container = SeededContainer(configuration=dict(sender=sender))
     container.override(overriding_container)
     container.wire(modules=['..python_dependency_injector_example'])
 
