@@ -1,0 +1,30 @@
+---
+layout: post
+title: "What will you do with those 5 bytes?"
+tags: [decision-making, problem-solving]
+description: Think about all the ways you could use 5 more bytes on your drive. Or what you can do with that 1 second more in your life.
+date: 2025-05-14
+last_modified_at: 2025-05-17
+---
+
+"Quantity" and "Qty".
+8 characters vs 3 characters, 5 bytes of difference most of the time. A bit more if you're not a fan of `utf-8`.
+
+
+
+# Do not sacrifice verbosity for fewer keystrokes
+
+
+# Sometimes it might make sense.
+
+If you're writing IoT chip or CPU software, I'll give you a pass.
+
+As always, if you're in one of those very niche cases where you care about having as little memory/storage footprint as possible, understandable.
+I'm not saying you're a bad person because you work in a domain where you're forced to implement those optimizations.
+It might even be beneficial to follow the naming standards that are older than yourself - people using your software directly will appreciate it!
+But that's the case where it makes sense.
+
+You first solve the problem at hand, it works the way it should, but you would love it to fit in half the size.
+You cut some unnecessary variables here, rewrite the code to be shorter there, but you're still missing that 1kB.
+You *could* spend 2 more weeks looking for a better solution, rearchitecture the whole codebase and have it done.
+You *could* also switch a few names for something shorter and be done with it this afternoon - knowing everything else works, so taking as little risk as possible.

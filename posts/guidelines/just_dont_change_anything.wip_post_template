@@ -1,0 +1,59 @@
+---
+layout: post
+title: "Just don't change anything - "
+tags: [immutability, guidelines]
+description: Usually data breaks when it's changed - incorrectly, unexpectedly, not knowing about change consequences. Many of those bugs can be eliminated by defaulting to immutable code.
+date: 2025-08-12
+last_modified_at: 2025-08-12
+---
+
+## Just don't change anything.
+
+It may sound like a clickbait, but it's actually works.
+You can avoid a whole class of bugs related to partial data updates, data loss, race conditions and many more by defaulting to immutable code.
+All those stem from the fact that multiple pieces of code are working with the same data, are not aware of each other's changes and all can change the state.
+
+
+## Enter Immutable data.
+
+Many programming languages (Erlang, Haskell, F#) and databases (ElasticSearch's Lucene indices, Write-Ahead-Log in RDBMSes) rely on immutable data to provide predictable and performant results.
+
+You see, the mutability and imperative code are not for free.
+You get more freedom and options, but that also means more ways to break things.
+This in turn means in libraries, databases, languages having to take this into account if the software is to work correctly.
+
+The result is that you have to write more code to control that and, even more importantly, you have to always remember about this, whenever you change data.
+If you have a well-managed software that needs to be as performant as possible, sure, you need to take the hit and manage this accidental complexity.
+
+
+## Not always a performance hit.
+
+CPU or RAM does not constrain most business problems, so in most cases, it's not a problem and you can take the hit.
+Many of those problems are related to data consistency, ensuring information is persistent fully, it's reliable and so on.
+
+If you use immutability and persist everything at once, you only need a single trip over the network.
+If you do not, now you need external transactions to manage partial data updates and commit/rollback handling.
+Even one additional network message will outweigh the lower performance due to creating data copies.
+
+Know your constraints.
+
+
+## You can still mutate internally.
+
+Issues mentioned before are only problematic if multiple functionalities, threads, processes work on the exact copy of data.
+It's totally fine to mutate data if you are 100% sure that nothing else can change it.
+At least within reason, let's ignore hackers changing data directly in RAM, that means bigger issues.
+
+It's totally fine to crease and modify an internal variable which lives only as long as a function call is being processed and then returns.
+Probably to keep consistent in such cases you'd want to operate internally on mutable data for performance or to leverage existing code but then convert to immutable structures when you return.
+
+
+## Functional Core.
+
+If you're not convinced it's worth it everywhere due to missing integrations and ready solutions, try at least a functional core.
+The idea is to reduce complexity where it's the most painful, usually that would be the core of the project where business rules live.
+By applying functional programming principles - immutability, pure functions, composability, it's easier to control flow of data, scope of changes and avoid bugs related to data changes.
+
+Business logic lives in memory, should not work with any databases, caches or other external systems.
+If it does, you most likely mix business logic and technical concerns, leading to increase in accidental complexity.
+Take a look at [the functional core blog post](https://thinkbeforecoding.com/post/2018/01/25/functional-core).

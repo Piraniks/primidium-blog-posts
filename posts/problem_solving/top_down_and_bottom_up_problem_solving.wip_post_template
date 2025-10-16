@@ -1,0 +1,31 @@
+---
+layout: post
+title: "Top-down and bottom-up problem-solving"
+tags: [decision-making, problem-solving]
+description: How you approach a problem can be almost as important as the solution itself. This post explores the two dominant strategies - top-down and bottom-up.
+date: 2025-05-24
+last_modified_at: 2025-05-25
+---
+
+Problem-solving in software engineering is never just about writing code — it’s about how you approach complexity.
+Most problems can be solved in a dozen or so ways, very few have a single good solution, so there is no always good or always bad answer.
+Even if the end-goal is the same, problem-solving is a process, so where you start will influence the solution you choose.
+
+Two modes of thinking I've came across are top-down and bottom-up.
+In this post, I’ll break down what each method really means and where it fits best.
+
+# Top-Down Problem-Solving
+
+
+
+# Bottom-Up Problem-Solving
+
+
+
+# When to Use Which Approach
+
+
+
+# Mixing Approaches
+
+
