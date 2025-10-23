@@ -1,6 +1,7 @@
 [tool.ruff]
 line-length = 120
 indent-width = 4
+exclude = [".venv", "auditable_calculations"]
 
 [tool.ruff.format]
 quote-style = "single"
@@ -17,14 +18,23 @@ select = [
     "B",
     "S",
     "SIM",
+    "FBT",
+    "C4",
+    "DTZ",
+    "SLF",
+    "TC",
+    "PTH",
+    "FLY",
 ]
 ignore = [
     "S701",  # Because we don't render anything - it's only for pre-processing.
     "SIM103",  # Sparse is better than dense, so in some scenarios it makes sense, but in others it's a PITA.
+    "C408",  # Sometimes it's easier to follow and migrate to a different implementation when not using literals.
+    "PTH123",  # There is no benefit of using a path instead of the open function.
 ]
 
 [tool.ruff.lint.mccabe]
-max-complexity = 8
+max-complexity = 5
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["E402", "F401"]

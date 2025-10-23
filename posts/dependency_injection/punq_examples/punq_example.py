@@ -24,6 +24,7 @@ would probably recommend implementing a custom solution instead of using it, as 
 extend it, and you don't have to rely on a third-party library that might not be maintained in the future and is a
 security risk.
 """
+
 from punq import Container
 
 from posts.dependency_injection.notification_sender import Confirmation, Notification, NotificationChannel, User
@@ -35,15 +36,12 @@ def send_notification(
     user: User,
     notification: Notification,
     # The only use-case in tests that requires kwargs is parametrization on resolution.
-    **notification_channel_kwargs
+    **notification_channel_kwargs,
 ) -> Confirmation:
     notification_channel = container.resolve(NotificationChannel, **notification_channel_kwargs)
     # Note: We have no typing suggestions, since the library does not support type hinting - we have to "trust" that
     # injected dependency implements a "send" method
     confirmation = notification_channel.send(
-        id=notification.id,
-        to=user.email,
-        subject=notification.name,
-        body=notification.message
+        id=notification.id, to=user.email, subject=notification.name, body=notification.message
     )
     return confirmation

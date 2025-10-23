@@ -5,10 +5,10 @@ from re import compile
 
 from jinja2 import Environment
 
-PUBLISHED_DATE_REGEX_PATTERN_GROUP_NAME = r'posted_date'
+PUBLISHED_DATE_REGEX_PATTERN_GROUP_NAME = 'posted_date'
 _DATE_REGEX_PATTERN = r'[0-9]{4}\-[0-9]{2}\-[0-9]{2}'
 _PUBLISHED_DATE_REGEX_PATTERN = (
-    r'date\: (?P<' + PUBLISHED_DATE_REGEX_PATTERN_GROUP_NAME + r'>' + _DATE_REGEX_PATTERN + r')'
+    r'date\: (?P<' + PUBLISHED_DATE_REGEX_PATTERN_GROUP_NAME + '>' + _DATE_REGEX_PATTERN + ')'
 )
 PUBLISHED_DATE_PATTERN = compile(_PUBLISHED_DATE_REGEX_PATTERN)
 
@@ -20,7 +20,7 @@ SNIPPET_FORMAT = """```{language}
 {code}
 ```"""
 
-TIP_FORMAT = "> {tip}"
+TIP_FORMAT = '> {tip}'
 TIP_SUFFIX = r"""
 {: .prompt-tip }
 """
@@ -128,8 +128,12 @@ def save_built_post(*, built_post_data: str, built_post_path: Path) -> None:
 
 
 def generate_built_post_name(
-    *, absolute_built_posts_directory: Path, absolute_raw_posts_directory: Path,
-    template_content: str, template_directory: Path, template_path: Path
+    *,
+    absolute_built_posts_directory: Path,
+    absolute_raw_posts_directory: Path,
+    template_content: str,
+    template_directory: Path,
+    template_path: Path,
 ) -> Path:
     searched_data = PUBLISHED_DATE_PATTERN.search(template_content)
     if not searched_data:
@@ -201,8 +205,9 @@ def build_posts(*, posts_directory: Path, built_posts_directory: Path) -> None:
 
         post_data.add((built_post_path, built_post_data))
 
-    if post_data:
-        for built_post_path, built_post_data in post_data:
-            save_built_post(built_post_data=built_post_data, built_post_path=built_post_path)
-    else:
+    if not post_data:
         logger.warning('No posts to build.')
+        return
+
+    for built_post_path, built_post_data in post_data:
+        save_built_post(built_post_data=built_post_data, built_post_path=built_post_path)

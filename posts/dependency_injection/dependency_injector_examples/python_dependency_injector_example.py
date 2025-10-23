@@ -26,6 +26,7 @@ recommend it for newbies, but only wit the assumption that it will be used long-
 in the future, not one-time scripts to be deleted after a few days.
 It seems like a default choice for a Python project requiring a dependency injection library.
 """
+
 from typing import Protocol, cast
 from uuid import UUID
 
@@ -50,7 +51,7 @@ class TypedConfiguration(Protocol):
 
 
 class Container(containers.DeclarativeContainer):
-    configuration = cast(TypedConfiguration, cast(object, providers.Configuration(strict=True)))
+    configuration = cast('TypedConfiguration', cast('object', providers.Configuration(strict=True)))
     # The main reason we're using a concrete implementation in the factory here is to show off how to work with such
     # cases. Of course, in theory we could have a ContainerBase from which all containers inherit etc... but even with
     # this more complex setup, it's still very easy to follow and work with in testing.
@@ -68,10 +69,7 @@ def declarative_send_notification(
     notification_channel: NotificationChannel = Provide[Container.notification_channel],
 ) -> Confirmation:
     confirmation = notification_channel.send(
-        id=notification.id,
-        to=user.email,
-        subject=notification.name,
-        body=notification.message
+        id=notification.id, to=user.email, subject=notification.name, body=notification.message
     )
     return confirmation
 
@@ -86,14 +84,11 @@ def declarative_send_notification_with_provider_parameters(
     notification_channel_provider: providers.Factory[NotificationChannel] = Provider[Container.notification_channel],
     # The only use-case in tests that requires kwargs is parametrization on resolution, in practice it would probably
     # be based on some values from inside the function, but this is the simplest example to show off and test.
-    **notification_channel_kwargs
+    **notification_channel_kwargs,
 ) -> Confirmation:
     notification_channel = notification_channel_provider(**notification_channel_kwargs)
     confirmation = notification_channel.send(
-        id=notification.id,
-        to=user.email,
-        subject=notification.name,
-        body=notification.message
+        id=notification.id, to=user.email, subject=notification.name, body=notification.message
     )
     return confirmation
 
@@ -108,9 +103,6 @@ def dynamic_send_notification(
     notification_channel: NotificationChannel = Provide['notification_channel'],
 ) -> Confirmation:
     confirmation = notification_channel.send(
-        id=notification.id,
-        to=user.email,
-        subject=notification.name,
-        body=notification.message
+        id=notification.id, to=user.email, subject=notification.name, body=notification.message
     )
     return confirmation

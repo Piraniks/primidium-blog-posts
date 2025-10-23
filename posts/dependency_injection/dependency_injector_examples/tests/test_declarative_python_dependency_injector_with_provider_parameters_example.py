@@ -30,6 +30,8 @@ def test_inject_client_with_parameters_on_resolution(
     container.wire(modules=['..python_dependency_injector_example'])
 
     sender = 'parametrized_on_resolution'
-    confirmation = declarative_send_notification_with_provider_parameters(user=user, notification=notification, sender=sender)
+    confirmation = declarative_send_notification_with_provider_parameters(
+        user=user, notification=notification, sender=sender
+    )
 
     assert confirmation == Confirmation(notification_id=notification.id, channel_id=f'declarative+{sender}')

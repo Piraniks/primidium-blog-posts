@@ -25,16 +25,10 @@ def compare_directories(*, expected_directory: Path, built_directory: Path) -> N
     for expected_file_path, built_file_path in zip(expected_file_paths, built_file_paths, strict=True):
         if expected_file_path.is_dir():
             # Check all nested directories, the same way we check the current one.
-            compare_directories(
-                expected_directory=expected_file_path,
-                built_directory=built_file_path
-            )
+            compare_directories(expected_directory=expected_file_path, built_directory=built_file_path)
 
         else:
-            with (
-                open(expected_file_path, 'r') as expected_file,
-                open(built_file_path, 'r') as built_file
-            ):
+            with open(expected_file_path, 'r') as expected_file, open(built_file_path, 'r') as built_file:
                 expected_file_contents = expected_file.read()
                 built_file_contents = built_file.read()
 
@@ -80,14 +74,9 @@ def expected_built_directory() -> Path:
 
 
 def test_compiles_all_post_samples_successfully_to_match_expected_built_posts(
-    posts_directory: Path,
-    built_posts_directory: Path,
-    expected_built_directory: Path
+    posts_directory: Path, built_posts_directory: Path, expected_built_directory: Path
 ) -> None:
     build_posts(posts_directory=posts_directory, built_posts_directory=built_posts_directory)
 
     expected_built_directory.exists()
-    compare_directories(
-        expected_directory=expected_built_directory,
-        built_directory=built_posts_directory
-    )
+    compare_directories(expected_directory=expected_built_directory, built_directory=built_posts_directory)

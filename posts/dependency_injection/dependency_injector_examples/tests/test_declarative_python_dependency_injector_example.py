@@ -161,6 +161,7 @@ def test_inject_notification_channel_with_parameters_on_injection(
             return Confirmation(notification_id=id, channel_id=f'declarative+{self.sender}')
 
     sender = 'parametrized_on_injection'
+
     class SeededContainer(containers.DeclarativeContainer):
         # This is not the best way to pass parameters on factory creation, but it's a simple example to prove a point.
         # Using a config provider and loading data from a file or passing it directly is the preferred way - then
@@ -255,7 +256,9 @@ def test_inject_notification_channel_with_dependency(
     # alternative container object to override with.
     class DependencyContainer(containers.DeclarativeContainer):
         email_recorder_service = providers.Singleton(DatabaseEmailRecorderService)
-        notification_channel = providers.Factory(ExternalServiceNotificationChannel, email_service=email_recorder_service)
+        notification_channel = providers.Factory(
+            ExternalServiceNotificationChannel, email_service=email_recorder_service
+        )
 
     container = Container()
     overriding_container = DependencyContainer()
@@ -272,5 +275,12 @@ def test_inject_notification_channel_with_dependency(
 
     expected_sent_email_for_confirmation = (user.email, notification.name, notification.message)
     assert email_recorder_service.sent_emails[confirmation.notification_id] == expected_sent_email_for_confirmation
-    expected_sent_email_for_different_confirmation = (different_user.email, different_notification.name, different_notification.message)
-    assert email_recorder_service.sent_emails[different_confirmation.notification_id] == expected_sent_email_for_different_confirmation
+    expected_sent_email_for_different_confirmation = (
+        different_user.email,
+        different_notification.name,
+        different_notification.message,
+    )
+    assert (
+        email_recorder_service.sent_emails[different_confirmation.notification_id]
+        == expected_sent_email_for_different_confirmation
+    )

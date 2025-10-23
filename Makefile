@@ -34,7 +34,7 @@ fix_all:
 
 check:
 	git diff --name-only | grep "*.py" | xargs ruff check
-	git diff --name-only | grep "*.py" | xargs ruff --check format
+	git diff --name-only | grep "*.py" | xargs ruff format --check
 
 check_all:
 	ruff check .
