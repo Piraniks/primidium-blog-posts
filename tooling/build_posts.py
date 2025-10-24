@@ -112,9 +112,8 @@ def collect_templates(*, path: Path, root_path: Path) -> dict[Path, str]:
         elif child_path.is_file() and is_post_template(path=child_path):
             logger.info(f'Retrieving content from template {child_path}')
             template_data = read_file_data(path=child_path)
-            cleaned_up_template_data = template_data
 
-            templates[child_path] = cleaned_up_template_data
+            templates[child_path] = template_data
 
     return templates
 

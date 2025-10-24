@@ -39,3 +39,6 @@ max-complexity = 5
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["E402", "F401"]
 "*test*.py" = ["S"]
+
+[tool.ty.src]
+exclude = ["posts/auditable_calculations"]
