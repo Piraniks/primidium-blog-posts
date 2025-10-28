@@ -112,16 +112,16 @@ def test_inject_randomized_seed_notification_channel_using_a_singleton_factory(
     first_container.notification_channel.override(providers.Singleton(NotificationChannelWithRandomSeed))
     first_container.wire(modules=['..python_dependency_injector_example'])
 
-    first_confirmation = declarative_send_notification(user=user, notification=notification)
-    second_confirmation = declarative_send_notification(user=user, notification=notification)
-    assert first_confirmation == second_confirmation
+    first_container_first_confirmation = declarative_send_notification(user=user, notification=notification)
+    first_container_second_confirmation = declarative_send_notification(user=user, notification=notification)
+    assert first_container_first_confirmation == first_container_second_confirmation
 
     second_container = Container()
     second_container.notification_channel.override(providers.Singleton(NotificationChannelWithRandomSeed))
     second_container.wire(modules=['..python_dependency_injector_example'])
 
-    third_confirmation = declarative_send_notification(user=user, notification=notification)
-    assert first_confirmation != third_confirmation
+    second_container_third_confirmation = declarative_send_notification(user=user, notification=notification)
+    assert first_container_first_confirmation != second_container_third_confirmation
 
 
 def test_inject_randomized_seed_notification_channel_using_a_factory(
