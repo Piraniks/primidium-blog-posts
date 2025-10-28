@@ -2,20 +2,20 @@ from contextlib import contextmanager
 from decimal import Decimal
 from functools import wraps
 from time import monotonic
-from typing import IO, Any, Callable
+from typing import IO, Callable, Generator
 
 
 @contextmanager
-def timer(*, logger: IO, name: str = 'timer context manager', display_threshold: Decimal = Decimal(0.01)) -> Any:
+def timer(
+    *, logger: IO, name: str = 'timer context manager', display_threshold: Decimal = Decimal(0.01)
+) -> Generator[None, None, None]:
     before = monotonic()
-    result = yield
+    yield
     after = monotonic()
 
     time_elapsed = after - before
     if time_elapsed > display_threshold:
         logger.write(f'Elapsed time of {name}: {time_elapsed}')
-
-    return result
 
 
 def timed[**P, T](callable_: Callable[P, T], /) -> Callable[P, T]:
