@@ -7,7 +7,7 @@ from typing import IO, Callable, Generator
 
 @contextmanager
 def timer(
-    *, logger: IO, name: str = 'timer context manager', display_threshold: Decimal = Decimal(0.01)
+    *, logger: IO, name: str = 'timer', display_threshold: Decimal = Decimal(0.01)
 ) -> Generator[None, None, None]:
     before = monotonic()
     yield

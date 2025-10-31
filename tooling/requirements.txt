@@ -4,6 +4,10 @@ Jinja2==3.1.4
 IPython==8.13.0
 # Testing like human beings.
 pytest==8.3.3
+# Testing like human beings, but async.
+pytest-asyncio==1.2.0
+# Testing like human beings, but distributed across multiple runtimes.
+pytest-xdist==3.8.0
 # CLI tooling for easier management
 typer==0.15.2
 # Type checking
