@@ -42,3 +42,6 @@ max-complexity = 5
 
 [tool.ty.src]
 exclude = ["posts/auditable_calculations"]
+
+[tool.pytest.ini_options]
+minversion = "8.3"

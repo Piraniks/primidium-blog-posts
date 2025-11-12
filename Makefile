@@ -7,10 +7,12 @@ install_tooling_dependencies:
 install_posts_dependencies:
 	find . -type f -name requirements.txt -not -path "./tooling/*" -exec pip install -r {} \;
 
+install: install_tooling_dependencies install_posts_dependencies
+
 clean:
 	rm -rf .venv
 
-init: clean create_venv install_tooling_dependencies install_posts_dependencies
+init: clean create_venv install
 
 build_posts:
 	python tooling/cli.py build-posts ./.local/built_posts
@@ -21,7 +23,8 @@ test_posts:
 test_tooling:
 	pytest tooling -vv
 
-test: test_posts test_tooling
+test: # test_posts test_tooling
+	pytest . -vv
 
 fix:
 	git diff --name-only | grep "*.py" | xargs ruff check --fix
