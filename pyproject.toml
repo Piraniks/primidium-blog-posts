@@ -1,7 +1,11 @@
 [tool.ruff]
 line-length = 120
 indent-width = 4
-exclude = [".venv", "auditable_calculations"]
+exclude = [
+    ".venv",  # Venv is always excluded. Pernament resident, linting shouldn't care about it.
+    # Temporarily excluded directories due to WIP on the branch that may cause errors.
+    "auditable_calculations"
+]
 
 [tool.ruff.format]
 quote-style = "single"
@@ -37,11 +41,19 @@ ignore = [
 max-complexity = 5
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["E402", "F401"]
-"*test*.py" = ["S"]
+"__init__.py" = [
+    "E402",  # Because imports can include logic in the case of __init__.
+    "F401"  # Because imports in __init__ are for other places to import.
+]
+"*test*.py" = [
+    "S"  # Tests code may have looser contraints and will use asserts for example.
+]
 
 [tool.ty.src]
-exclude = ["posts/auditable_calculations"]
+# Temporarily excluded directories due to WIP on the branch that may cause errors.
+exclude = [
+    "posts/auditable_calculations"
+]
 
 [tool.pytest.ini_options]
 minversion = "8.3"

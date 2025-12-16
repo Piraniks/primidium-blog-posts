@@ -45,4 +45,4 @@ check_all:
 type:
 	ty check .
 
-all: type test check_all fix_all
+all: type fix_all test
