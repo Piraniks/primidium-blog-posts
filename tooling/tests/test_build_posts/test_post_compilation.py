@@ -62,7 +62,7 @@ def built_posts_directory() -> Path:
     if not built_posts_directory_path.exists():
         built_posts_directory_path.mkdir()
 
-    # Clean-up done on creation, directly before the test just in case previous run crashed and left some files.
+    # Clean up on creation, directly before the test just in case the previous run crashed and left some files.
     delete_built_directory_contents(directory_path=built_posts_directory_path)
 
     return built_posts_directory_path
