@@ -3,7 +3,7 @@ from pathlib import Path
 
 import typer
 
-from tooling.build_posts import build_posts
+from build_posts import build_posts
 
 tooling_directory = Path(__file__).parent
 MAIN_REPOSITORY_DIRECTORY = tooling_directory.parent
