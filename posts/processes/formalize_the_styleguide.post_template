@@ -82,7 +82,7 @@ Keep the context on why particular rule exists, what do we gain, when it's requi
 Be focused and to-the-point if possible, so it's less text to process.
 The simpler the rules, the shorter the description, the easier it is to follow them.
 
-### Keep it close to the code.
+### Keep it close to the code
 
 Keeping the styleguide in the repository next to your code helps on multiple levels.
 When you're working on something and notice na issue, you can adjust the code on the fly and commit on a different branch after stashing it.
@@ -90,14 +90,14 @@ All the context about "how" the code is written and "why" is kept in one place, 
 
 Nowadays, it's also common to use LLMs, so storing the rules in the repository makes it easy to instruct your agent to use the same rules.
 
-### Don't repeat the docs.
+### Don't repeat the docs
 
 If it's a reference to some detailed rule, link it in a comment on a pull request.
 If it's currently a best practice, mention it and carry on.
 Your styleguide should be easy to go through, link particular rules and explain as briefly as practical why it's there.
 Everything else is noise for day-to-day usage, if people need more details - give them a source, some context about why it's applicable here and carry on.
 
-### Automate enforcement.
+### Automate enforcement
 
 Some rules can be enforced using tooling like ruff on the structure level and more advanced tooling like LLMs when project context is needed.
 You never want to modify existing data structures but create new ones instead?
