@@ -1,0 +1,108 @@
+---
+layout: post
+title: "Formalize the code styleguide"
+tags: [styleguide, code, process, LLM]
+description: Every organization has a set of rules all code should follow. Sometimes it's explicitly written down. Sometimes it lives in heads of the engineering team. Writing it down simplifies the day to day work in a few ways.
+date: 2026-09-23
+last_modified_at: 2026-09-23
+---
+
+## The Styleguide
+It doesn't matter if it's a huge organization or a small script you're tinkering on.
+All software engineers have a set of patterns that they follow.
+
+A styleguide contains all the code rules which are not obvious.
+Patterns, approaches, code that on their own are fine, but in the context may not be not desirable.
+Those are the decisions we make because we want to reduce the number choices down the line.
+The "our way" of doing things.
+
+The reasons aren't that important for now, although a bit further the "why" will be discussed as well.
+
+## Explicit vs Implicit
+If you want to come back to the code at any point, it's best to have a set of rules to follow for consistency.
+You can keep those rules in your head, if it's a few dozens of lines of code you're probably fine.
+But as the codebase grows, as you make more changes, keeping all the conventions in your head slows you down.
+
+It's a best practice to use linters to enforce patterns and make code more predictable.
+We have tooling to look for common bugs, easy to miss typos or apply formatting.
+
+All the boring steps should be automated.
+
+## High-leverage Engineering
+
+### Teams
+Especially in large organizations, without a formalized styleguide, you can only follow one of two paths:
+1. Accept anything. As long as it works, it's fine, we can adjust it later.
+2. Follow a few general rules, let the team discuss each "it depends" case every single time it happens.
+
+Both those options are generally fine depending on the context, but there are significant costs to them.
+
+If you allow any code to be committed, it will be hard to switch from code written by one engineer to code written by another engineer.
+Even worse, as time goes on, people change habits and opinions.
+So that another engineer may be you, from the past.
+You lose time when you need to come back, you already changed your opinions a while back but didn't refactor existing code.
+
+If you discuss ever other line of code, a significant amount of your time will be spent on being a glorified code formatter.
+In addition, this may also lead to people missing the forrest for the trees.
+There are 10 comments in this function already, all the variable names are discussed, no need to look for a race condition, right?
+How even would you, on a diff with live discussions every line?
+It adds friction on all levels and causes frustration.
+
+I would argue that the moment you start noticing this friction, you should formalize the styleguide.
+It's fine to say "just take whatever X uses" at first as long as you're fine with it.
+As time goes on, you will find bugs, you will notice patterns that are problematic and alternatives that are much easier to work with.
+Change the styleguide.
+Evolution over revolution - adjust as you notice issues and carry on.
+
+### LLMs
+A styleguide is also useful in the context of LLMs.
+A concise styleguide with clear examples and content will greatly increase the chances you won't see the discouraged patterns.
+Static tooling can take you only so far. To contextualize patterns and approaches, you need tools that processes context.
+The code, the infrastructure, the documentation.
+All of those can help with automation.
+LLMs to take the "automate the boring steps" a step further.
+
+
+### Use examples
+
+LLMs are great at taking existing pieces of content and turning them into a different format.
+Sadly, not so great at understanding what abstract concepts like "maintainable" mean.
+Especially in cases where there is no easy translation from the word to patterns to apply.
+
+The easiest way I found to solve this issue is to provide an example for every rule you introduce.
+It's also important to ensure that no rules are broken in the "use this" examples.
+If you provide only correct examples, LLM will have more data to base the generated content on.
+If you don't, LLM will more likely generate code that does not follow all the rules.
+
+### Include the "why"
+
+Over time, rules change and evolve. Best practice today may backfire on us and a year down the line it may be discouraged.
+Keep the context on why particular rule exists, what do we gain, when it's required if it's not universal.
+
+Be focused and to-the-point if possible, so it's less text to process.
+The simpler the rules, the shorter the description, the easier it is to follow them.
+
+### Keep it close to the code.
+
+Keeping the styleguide in the repository next to your code helps on multiple levels.
+When you're working on something and notice na issue, you can adjust the code on the fly and commit on a different branch after stashing it.
+All the context about "how" the code is written and "why" is kept in one place, so it's the single source of truth.
+
+Nowadays, it's also common to use LLMs, so storing the rules in the repository makes it easy to instruct your agent to use the same rules.
+
+### Don't repeat the docs.
+
+If it's a reference to some detailed rule, link it in a comment on a pull request.
+If it's currently a best practice, mention it and carry on.
+Your styleguide should be easy to go through, link particular rules and explain as briefly as practical why it's there.
+Everything else is noise for day-to-day usage, if people need more details - give them a source, some context about why it's applicable here and carry on.
+
+### Automate enforcement.
+
+Some rules can be enforced using tooling like ruff on the structure level and more advanced tooling like LLMs when project context is needed.
+You never want to modify existing data structures but create new ones instead?
+Or maybe dependency injection is required within the context of the project?
+
+Automate the enforcement of the rules through your CI so people do not need to beat others with a book and can focus on the high-level concerns.
+
+**Keeping the styleguide up-to-date is not free. Let's make sure it's useful.**

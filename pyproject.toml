@@ -1,3 +1,10 @@
+[project]
+name = "primidium-blog-post"
+version = "0.1.0"
+readme = "README.md"
+dependencies = []
+requires-python = ">=3.14"
+
 [tool.ruff]
 line-length = 120
 indent-width = 4
