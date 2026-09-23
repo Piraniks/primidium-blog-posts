@@ -1,13 +1,16 @@
 import os
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from tooling.build_posts import build_posts
 from tooling.tests.test_build_posts import BUILD_POSTS_DIRECTORY_PATH
 
+if TYPE_CHECKING:
+    from pathlib import Path
 
-def compare_directories(*, expected_directory: Path, built_directory: Path) -> None:
+
+def compare_directories(*, expected_directory: 'Path', built_directory: 'Path') -> None:
     common_path = os.path.commonpath([expected_directory, built_directory])
 
     relative_expected_directory = BUILD_POSTS_DIRECTORY_PATH / expected_directory.relative_to(common_path)
@@ -35,12 +38,12 @@ def compare_directories(*, expected_directory: Path, built_directory: Path) -> N
             assert expected_file_contents == built_file_contents
 
 
-def delete_built_directory_contents(*, directory_path: Path) -> None:
+def delete_built_directory_contents(*, directory_path: 'Path') -> None:
     for built_directory_path_child in directory_path.iterdir():
         _delete_built_directory(directory_path=built_directory_path_child)
 
 
-def _delete_built_directory(*, directory_path: Path) -> None:
+def _delete_built_directory(*, directory_path: 'Path') -> None:
     if not directory_path.is_dir():
         directory_path.unlink()
         return
@@ -51,12 +54,12 @@ def _delete_built_directory(*, directory_path: Path) -> None:
 
 
 @pytest.fixture
-def posts_directory() -> Path:
+def posts_directory() -> 'Path':
     return BUILD_POSTS_DIRECTORY_PATH / 'posts'
 
 
 @pytest.fixture
-def built_posts_directory() -> Path:
+def built_posts_directory() -> 'Path':
     built_posts_directory_path = BUILD_POSTS_DIRECTORY_PATH / 'built_posts'
 
     if not built_posts_directory_path.exists():
@@ -69,12 +72,12 @@ def built_posts_directory() -> Path:
 
 
 @pytest.fixture
-def expected_built_directory() -> Path:
+def expected_built_directory() -> 'Path':
     return BUILD_POSTS_DIRECTORY_PATH / 'expected_built_posts'
 
 
 def test_compiles_all_post_samples_successfully_to_match_expected_built_posts(
-    posts_directory: Path, built_posts_directory: Path, expected_built_directory: Path
+    posts_directory: 'Path', built_posts_directory: 'Path', expected_built_directory: 'Path'
 ) -> None:
     build_posts(posts_directory=posts_directory, built_posts_directory=built_posts_directory)
 

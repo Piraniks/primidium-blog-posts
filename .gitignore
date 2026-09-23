@@ -4,6 +4,8 @@
 !README.md
 !Makefile
 !pyproject.toml
+!uv.lock
+!.python-version
 
 !posts/
 !posts/**
@@ -23,3 +25,4 @@ tooling/**/built_posts/**
 !**/*.py
 !**/*.template
 !**/requirements.txt
+!**/pyproject.toml

@@ -25,9 +25,12 @@ extend it, and you don't have to rely on a third-party library that might not be
 security risk.
 """
 
-from punq import Container
+from typing import TYPE_CHECKING
 
 from posts.dependency_injection.notification_sender import Confirmation, Notification, NotificationChannel, User
+
+if TYPE_CHECKING:
+    from punq import Container
 
 
 def send_notification(

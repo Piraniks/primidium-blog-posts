@@ -55,6 +55,7 @@ max-complexity = 5
 "*test*.py" = [
     "S"  # Tests code may have looser contraints and will use asserts for example.
 ]
+"posts/auditable_calculations/*" = ['*']
 
 [tool.ty.src]
 # Temporarily excluded directories due to WIP on the branch that may cause errors.
@@ -64,3 +65,15 @@ exclude = [
 
 [tool.pytest.ini_options]
 minversion = "8.3"
+
+[tool.uv.workspace]
+members = [
+    "tooling",
+]
+
+[dependency-groups]
+code-check = [
+    "ruff>=0.16.8",
+    "ty>=0.0.83",
+    "pip==26.2.1"
+]

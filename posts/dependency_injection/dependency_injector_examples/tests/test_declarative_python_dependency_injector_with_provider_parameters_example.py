@@ -1,4 +1,4 @@
-from uuid import UUID
+from typing import TYPE_CHECKING
 
 from dependency_injector import providers
 
@@ -7,6 +7,9 @@ from posts.dependency_injection.dependency_injector_examples.python_dependency_i
     declarative_send_notification_with_provider_parameters,
 )
 from posts.dependency_injection.notification_sender import Confirmation, Notification, NotificationChannel, User
+
+if TYPE_CHECKING:
+    from uuid import UUID
 
 
 def test_inject_client_with_parameters_on_resolution(

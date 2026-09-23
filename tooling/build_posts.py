@@ -1,9 +1,12 @@
 import logging
 from functools import partial
-from pathlib import Path
 from re import compile
+from typing import TYPE_CHECKING
 
 from jinja2 import Environment
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 PUBLISHED_DATE_REGEX_PATTERN_GROUP_NAME = 'posted_date'
 _DATE_REGEX_PATTERN = r'[0-9]{4}\-[0-9]{2}\-[0-9]{2}'

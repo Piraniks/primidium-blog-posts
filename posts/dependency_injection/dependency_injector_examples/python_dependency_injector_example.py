@@ -27,17 +27,19 @@ in the future, not one-time scripts to be deleted after a few days.
 It seems like a default choice for a Python project requiring a dependency injection library.
 """
 
-from typing import Protocol, cast
-from uuid import UUID
+from typing import TYPE_CHECKING, Protocol, cast
 
 from dependency_injector import containers, providers
 from dependency_injector.wiring import Provide, Provider, inject
 
-from posts.dependency_injection.notification_sender import Confirmation, Notification, User
+if TYPE_CHECKING:
+    from uuid import UUID
+
+    from posts.dependency_injection.notification_sender import Confirmation, Notification, User
 
 
 class NotificationChannel(Protocol):
-    def send(self, id: UUID, to: str, subject: str, body: str) -> Confirmation:
+    def send(self, id: 'UUID', to: str, subject: str, body: str) -> 'Confirmation':
         raise NotImplementedError()
 
 
@@ -64,10 +66,10 @@ class Container(containers.DeclarativeContainer):
 @inject
 def declarative_send_notification(
     *,
-    user: User,
-    notification: Notification,
+    user: 'User',
+    notification: 'Notification',
     notification_channel: NotificationChannel = Provide[Container.notification_channel],
-) -> Confirmation:
+) -> 'Confirmation':
     confirmation = notification_channel.send(
         id=notification.id, to=user.email, subject=notification.name, body=notification.message
     )
@@ -77,15 +79,15 @@ def declarative_send_notification(
 @inject
 def declarative_send_notification_with_provider_parameters(
     *,
-    user: User,
-    notification: Notification,
+    user: 'User',
+    notification: 'Notification',
     # Important: Provider here vs Provide in other cases. It will return the provider (e.g., a factory) instead of an
     # instance, so we can pass arguments dynamically, based on the local context.
     notification_channel_provider: providers.Factory[NotificationChannel] = Provider[Container.notification_channel],
     # The only use-case in tests that requires kwargs is parametrization on resolution, in practice it would probably
     # be based on some values from inside the function, but this is the simplest example to show off and test.
     **notification_channel_kwargs,
-) -> Confirmation:
+) -> 'Confirmation':
     notification_channel = notification_channel_provider(**notification_channel_kwargs)
     confirmation = notification_channel.send(
         id=notification.id, to=user.email, subject=notification.name, body=notification.message
@@ -96,12 +98,12 @@ def declarative_send_notification_with_provider_parameters(
 @inject
 def dynamic_send_notification(
     *,
-    user: User,
-    notification: Notification,
+    user: 'User',
+    notification: 'Notification',
     # In theory, we could use the same string approach when using a declarative container. But we cannot use it the
     # other way around, because dynamic container has no attributes to start with, so this is the only sensible option.
     notification_channel: NotificationChannel = Provide['notification_channel'],
-) -> Confirmation:
+) -> 'Confirmation':
     confirmation = notification_channel.send(
         id=notification.id, to=user.email, subject=notification.name, body=notification.message
     )

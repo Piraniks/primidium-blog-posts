@@ -1,5 +1,5 @@
 # DI libraries being tested
 punq==0.7.0
-dependency-injector==4.42.0
+dependency-injector==4.49.1
 # Testing utilities
 pytest==8.3.3

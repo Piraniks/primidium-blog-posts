@@ -1,4 +1,4 @@
-from uuid import UUID
+from typing import TYPE_CHECKING
 
 from dependency_injector import providers
 from dependency_injector.containers import DynamicContainer
@@ -7,6 +7,9 @@ from posts.dependency_injection.dependency_injector_examples.python_dependency_i
     dynamic_send_notification,
 )
 from posts.dependency_injection.notification_sender import Confirmation, Notification, NotificationChannel, User
+
+if TYPE_CHECKING:
+    from uuid import UUID
 
 
 def test_inject_client_without_any_parameters(
